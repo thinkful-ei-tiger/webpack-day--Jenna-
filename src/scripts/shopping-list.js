@@ -2,24 +2,30 @@ import store from './store.js';
 import item from './item.js';
 
 const generateItemElement = function (item) {
-  let itemTitle = `<span class="shopping-item shopping-item__checked">${item.name}</span>`;
+  let itemTitle = `<span class='shopping-item shopping-item__checked'>${item.name}</span>`;
   if (!item.checked) {
     itemTitle = `
-      <form class="js-edit-item">
-        <input class="shopping-item" type="text" value="${item.name}" />
-      </form>
+     <span class='shopping-item'>${item.name}</span>
     `;
+  }
+  if (item.toEdit) {
+    itemTitle = `
+    <input type="text" class="newName" value="${item.name}">
+    <button class="button-label js-confirm-edit">click to confirm</button>`
   }
 
   return `
-    <li class="js-item-element" data-item-id="${item.id}">
+    <li class='js-item-element' data-item-id='${item.id}'>
       ${itemTitle}
-      <div class="shopping-item-controls">
-        <button class="shopping-item-toggle js-item-toggle">
-          <span class="button-label">check</span>
+      <div class='shopping-item-controls'>
+        <button class='shopping-item-toggle js-item-toggle'>
+          <span class='button-label'>check</span>
         </button>
-        <button class="shopping-item-delete js-item-delete">
-          <span class="button-label">delete</span>
+        <button class='shopping-item-delete js-item-delete'>
+          <span class='button-label'>delete</span>
+        </button>
+        <button class='shopping-item-edit js-item-edit'>
+          <span class='button-label'>edit</span>
         </button>
       </div>
     </li>`;
@@ -80,15 +86,34 @@ const handleDeleteItemClicked = function () {
   });
 };
 
-const handleEditShoppingItemSubmit = function () {
-  $('.js-shopping-list').on('submit', '.js-edit-item', event => {
-    event.preventDefault();
+const handleEditItemClick = function () {
+  $('.js-shopping-list').on('click', '.js-item-edit', event => {
     const id = getItemIdFromElement(event.currentTarget);
-    const itemName = $(event.currentTarget).find('.shopping-item').val();
-    store.findAndUpdateName(id, itemName);
+    toggleToEdit(id);
     render();
-  });
-};
+  })
+}
+
+const toggleToEdit = (id) => {
+  const index = store.items.findIndex(item => item.id === id);
+  const found = store.items[index];
+  found.toEdit = !found.toEdit;
+}
+
+const handleEditConfirmClick = () => {
+  $('.js-shopping-list').on('click', '.js-confirm-edit', event => {
+    const id = getItemIdFromElement(event.currentTarget);
+    const newName = $(event.currentTarget).closest('li').find('.newName').val();
+    editItemName(id, newName);
+  })
+}
+
+const editItemName = (id, newName) => {
+  const found = store.items.find(item => item.id === id);
+  found.name = newName;
+  found.toEdit = false;
+  render();
+}
 
 const handleToggleFilterClick = function () {
   $('.js-filter-checked').click(() => {
@@ -101,7 +126,8 @@ const bindEventListeners = function () {
   handleNewItemSubmit();
   handleItemCheckClicked();
   handleDeleteItemClicked();
-  handleEditShoppingItemSubmit();
+  handleEditConfirmClick();
+  handleEditItemClick();
   handleToggleFilterClick();
 };
 

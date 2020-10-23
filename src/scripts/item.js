@@ -5,8 +5,9 @@ const validateName = function(name) {
 const create = function(name) {
   return {
     id: cuid(),
-    name,
-    checked: false
+    name: name,
+    checked: false,
+    toEdit: false
   };
 };
 
