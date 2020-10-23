@@ -1,0 +1,23 @@
+{
+  "name": "webpack-shopping-list-starter",
+  "version": "1.0.0",
+  "description": "Please reference the startup instructions within your curriculum.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkful-ei-tiger/webpack-day--Jenna-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thinkful-ei-tiger/webpack-day--Jenna-/issues"
+  },
+  "homepage": "https://github.com/thinkful-ei-tiger/webpack-day--Jenna-#readme",
+  "dependencies": {
+    "jquery": "^3.5.1"
+  }
+}
